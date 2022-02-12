@@ -1,0 +1,59 @@
+
+<h1>Events</h1><br>
+
+<%=turbo_frame_tag "events" do %>
+<div class="flex flex-row pb-4">
+    <%= form_with url: "", method: :get, data: {turbo_frame: "events", turbo_action: "advance"} do |form | %>
+    Results Per Page <%= form.select :count, options_for_select([15,30,45,60], selected: @count), {}, {onchange: "document.querySelector('#page').value = 1; this.form.requestSubmit()"}%>
+    Page <%= form.select :page, options_for_select((1...page_count(@count, @total)).to_a, selected: @page), {}, {onchange: "this.form.requestSubmit()"}%>
+
+    <%end%>
+
+</div>
+    <div class="flex flex-col items-center">
+        <!-- Help text -->
+        <span class="text-sm text-gray-700 ">
+            Showing <span class="font-semibold text-gray-900"><%=first_item_index(@page, @count)%></span> to <span class="font-semibold text-gray-900"><%= last_item_index(@page, @count, @total) %></span> of <span class="font-semibold text-gray-900"><%=@total%></span> Entries
+        </span>
+    </div>
+<div class="flex flex-row w-full flex-wrap justify-evenly">
+    <% @series.each do |series|%>
+        <div class="max-w-md w-1/2 lg:flex pb-4">
+            <div class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" style="background-image: url(<%=series.photo%>)" title="Woman holding a mug">
+            </div>
+            <div class="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                <div class="mb-8">
+                <p class="text-sm text-grey-dark flex items-center">
+                Series
+                </p>
+                <div class="text-black font-bold text-xl mb-2"><%=series.title%></div>
+                <p class="text-grey-darker text-base"><%=series.about%></p>
+                </div>
+                <p class="text-sm text-grey-dark flex items-center">
+                <%=number_to_currency(series.price/100)%>
+                </p>
+            </div>
+        </div>
+    <%end%>
+
+<% @activities.each do |activity|%>
+    <div class="max-w-md w-1/2 lg:flex pb-4">
+        <div class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" style="background-image: url(<%=activity.photo%>)" title="Woman holding a mug">
+        </div>
+        <div class="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+            <div class="mb-8">
+            <p class="text-sm text-grey-dark flex items-center">
+            Activity
+            </p>
+            <div class="text-black font-bold text-xl mb-2"><%=activity.title%></div>
+            <p class="text-grey-darker text-base"><%=activity.about%></p>
+            </div>
+             <p class="text-sm text-grey-dark flex items-center">
+            <%=number_to_currency(activity.price/100)%>
+            </p>
+        </div>
+    </div>
+<%end%>
+<%end%>
+
+

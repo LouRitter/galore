@@ -1,8 +1,14 @@
 class ApplicationController < ActionController::Base
 
     def events
-        @galore = GaloreEventService.new()
-        @events = @galore.get_events
-        render json: JSON.pretty_generate(JSON.parse(@events.to_s))
+        @page = params[:page] 
+        @count = params[:count]
+        @events = JSON.parse(GaloreEventService.call({count: @count, page: @page}))
+        @total = @events["total"]
+        @last_page = @events["last_page"]
+        @series = SeriesParser.new(@events["series"]).parse
+        @activities = ActivityParser.new(@events["activities"]).parse 
     end
+
+
 end
